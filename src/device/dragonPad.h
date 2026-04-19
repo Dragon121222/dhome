@@ -35,7 +35,7 @@ public:
         self_->info("cmd: " + cmd);
 
         //Start Wake Word Listener
-        pid_t wakeWordPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::run(cmd);
+        pid_t wakeWordPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::launch(cmd);
 
         // Retry connect until Python is ready
         typename dtraits_t::error e = dtraits_t::error::kError;

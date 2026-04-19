@@ -1,0 +1,14 @@
+[Unit]
+Description=dHome Home Automation Daemon
+After=network.target sound.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/dhome
+Restart=on-failure
+RestartSec=5
+User=drake
+Environment=HOME=/home/drake
+
+[Install]
+WantedBy=multi-user.target

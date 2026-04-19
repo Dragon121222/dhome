@@ -36,7 +36,7 @@ public:
 
         size_t turns = 0; 
 
-        while(true) {
+        while(currentState_ != state_t::END) {
 
             self_->info(std::string("Turn: ") + std::to_string(turns));
 
