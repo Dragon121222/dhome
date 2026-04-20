@@ -6,6 +6,7 @@
 #include "mixin.h"
 #include "mixinBase.h"
 #include "terminalInput.h"
+#include "tui.h"
 #include "log.h"
 #include "fsm.h"
 #include "yaml.h"

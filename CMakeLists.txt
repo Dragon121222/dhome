@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(dhome src/main.cpp)
 
 find_package(yaml-cpp REQUIRED)
-target_link_libraries(dhome yaml-cpp)
+target_link_libraries(dhome yaml-cpp ncurses)
 
 target_include_directories(dhome PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include

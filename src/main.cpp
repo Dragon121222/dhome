@@ -34,7 +34,8 @@ struct app_traits {
 using app_t = dhome::util::mixin<
     dhome::util::fsm<app,app_traits>,
     dhome::util::terminalInput<app,app_traits>,
-    dhome::util::log<app,app_traits>,
+    dhome::util::tui<app,app_traits>,
+    // dhome::util::log<app,app_traits>,
     dhome::util::yaml<app,app_traits>,
     dhome::util::systemCmd<app,app_traits>,
     dhome::net::unixSocket<app,app_traits>,

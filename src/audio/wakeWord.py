@@ -2,6 +2,7 @@ import sounddevice as sd
 import numpy as np
 from openwakeword.model import Model
 import socket
+import os
 
 CHUNK = 1280  # 80ms at 16kHz, required by openWakeWord
 RATE = 16000
@@ -9,9 +10,11 @@ RATE = 16000
 # model = Model(wakeword_models=["/usr/lib/python3.14/site-packages/openwakeword/resources/models/Ok_GLaDOS.onnx"], inference_framework="onnx")
 model = Model(wakeword_models=["hey_jarvis"], inference_framework="onnx")
 
-
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-sock.bind("/tmp/dhome_wake.sock")
+socket_path = "/tmp/dhome_wake.sock"
+if os.path.exists(socket_path):
+    os.unlink(socket_path)
+sock.bind(socket_path)
 sock.listen(1)
 print("Waiting for dhome to connect...")
 conn, _ = sock.accept()

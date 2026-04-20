@@ -3,12 +3,16 @@ Description=dHome Home Automation Daemon
 After=network.target sound.target
 
 [Service]
+ExecStartPre=/bin/rm -f /tmp/dhome_wake.sock
 Type=simple
 ExecStart=/usr/local/bin/dhome
 Restart=on-failure
 RestartSec=5
 User=drake
 Environment=HOME=/home/drake
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=PULSE_RUNTIME_PATH=/run/user/1000/pulse
+
 
 [Install]
 WantedBy=multi-user.target
