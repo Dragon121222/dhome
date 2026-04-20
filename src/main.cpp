@@ -84,7 +84,7 @@ state_t readConfig_() {
         return state_t::END;
     }
 
-    info("System Name: " + systemName_);
+    info<dhome::device::Device>("System Name: " + systemName_);
     state_t nextState; 
     e = dhome::util::getValFromMap<error_t>(deviceNameMap_, systemName_, nextState);
     if(e == error_t::kError) {
