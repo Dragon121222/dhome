@@ -49,12 +49,11 @@ public:
 
     }
 
-    void listenForTts() {
+    void listenForStt() {
         auto self_ = this->self();
 
         // --- STT ---
         ::unlink("/tmp/dhome_stt.sock");
-        // std::string sttCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py";
         std::string sttCmd  = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py >/dev/null 2>&1";
         self_->template info<dhome::audio::Audio>("Launching STT listener.");
         pid_t sttPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::launch(sttCmd);
@@ -83,18 +82,19 @@ public:
         self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(sttPid_);
     }
 
-
     typename dtraits_t::error connectStt(const char* path) {
-        sttFd_ = ::socket(AF_UNIX, SOCK_STREAM, 0);
-        if(sttFd_ < 0) return dtraits_t::error::kError;
+        auto self_ = this->self();
+
+        int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
+        if(fd < 0) return dtraits_t::error::kError;
         sockaddr_un addr{};
         addr.sun_family = AF_UNIX;
         ::strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
-        if(::connect(sttFd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
-            ::close(sttFd_);
-            sttFd_ = -1;
+        if(::connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+            ::close(fd);
             return dtraits_t::error::kError;
         }
+        self_->dhome::audio::stt<dbase_t,dtraits_t>::sttFd_ = fd;
         return dtraits_t::error::kNoError;
     }
 
@@ -126,10 +126,10 @@ public:
         }
 
         listenForWakeWord();
-
         self_->say("Yes?");
+
+        listenForStt();
         sleep(10);
-        listenForTts();
     }
 
     int sttFd_ = -1;
