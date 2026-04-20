@@ -1,37 +1,6 @@
-// #ifndef __DHomeSystem__
-// #define __DHomeSystem__
-// #include <cstdlib>
-
-// namespace dhome::util {
-
-// template<typename dbase, typename dtraits>
-// class systemCmd : public dhome::util::mixinBase<systemCmd<dbase,dtraits>> {
-// public:
-//     using typeTag       = Util;
-//     using type          = systemCmd;
-//     using dbase_t       = dbase;
-//     using dtraits_t     = dtraits;
-
-//     typename dtraits_t::error run(const char* cmd) {
-//         int ret = ::system(cmd);
-//         if(ret != 0) return dtraits_t::error::kError;
-//         return dtraits_t::error::kNoError;
-//     }
-
-//     typename dtraits_t::error run(const std::string& cmd) {
-//         return run(cmd.c_str());
-//     }
-// };
-
-// } // namespace dhome::util
-// #endif
-
 #ifndef __DHomeSystem__
 #define __DHomeSystem__
-#include <cstdlib>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <signal.h>
+
 namespace dhome::util {
 template<typename dbase, typename dtraits>
 class systemCmd : public dhome::util::mixinBase<systemCmd<dbase,dtraits>> {

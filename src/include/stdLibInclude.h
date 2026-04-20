@@ -21,5 +21,4 @@
 #include <sstream>
 #include <fcntl.h>
 
-
 #endif
