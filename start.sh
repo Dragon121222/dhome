@@ -1,5 +1,8 @@
 #!/bin/bash
 
+pkill -f wakeWord.py
+pkill -f stt.py
+
 if [[ "$(basename "$PWD")" == "build" ]]; then
     make
     sudo make install

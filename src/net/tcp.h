@@ -156,6 +156,20 @@ public:
         return dtraits_t::error::kError;
     }
 
+    static bool portInUse(uint16_t port) {
+        int fd = ::socket(AF_INET, SOCK_STREAM, 0);
+        if(fd < 0) return false;
+        int opt = 1;
+        ::setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+        sockaddr_in addr{};
+        addr.sin_family = AF_INET;
+        addr.sin_addr.s_addr = INADDR_ANY;
+        addr.sin_port = htons(port);
+        bool inUse = ::bind(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0;
+        ::close(fd);
+        return inUse;
+    }
+
 private:
     std::map<std::string, TcpConnection> connections_;
 };

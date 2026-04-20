@@ -100,12 +100,17 @@ public:
 
     typename dtraits_t::error onMessage(const std::string& msg, const std::string& ip, uint16_t port) {
         auto self_ = this->self();
-        self_->template info<dhome::audio::Audio>("Received: " + msg + " from " + ip);
+        self_->template info<dhome::net::Net>("Received: " + msg + " from " + ip);
         return dtraits_t::error::kNoError;
     }
 
     void run() {
         auto self_ = this->self();
+
+        if(self_->portInUse(dPort_)) {
+            self_->template error<dhome::net::Net>("Port: " + std::to_string(dPort_) + " is being used!");
+        }
+
         typename dtraits_t::error e1 = self_->listenOnPort(dPort_, &dragonPad<dbase,dtraits>::onMessage);
         if(e1 == dtraits_t::error::kError) {
             self_->template info<dhome::net::Net>("Could not listen on port.");
