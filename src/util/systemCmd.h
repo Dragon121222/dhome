@@ -50,11 +50,19 @@ public:
     pid_t launch(const std::string& cmd) {
         pid_t pid = ::fork();
         if(pid == 0) {
-            ::setpgid(0, 0); // new process group
+            ::setpgid(0, 0);
+            int devnull = ::open("/dev/null", O_WRONLY);
+            ::dup2(devnull, STDOUT_FILENO);
+            ::dup2(devnull, STDERR_FILENO);
+            ::close(devnull);
+            // Detach from controlling terminal
+            int tty = ::open("/dev/tty", O_RDWR);
+            if(tty >= 0) ::close(tty);
+            ::setsid();
             ::execl("/bin/sh", "sh", "-c", cmd.c_str(), nullptr);
             ::_exit(1);
         }
-        ::setpgid(pid, pid); // set from parent too (race prevention)
+        ::setpgid(pid, pid);
         return pid;
     }
 

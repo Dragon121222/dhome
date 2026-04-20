@@ -23,7 +23,8 @@ public:
 
         // --- Wake Word ---
         ::unlink("/tmp/dhome_wake.sock");
-        std::string wakeCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/wakeWord.py";
+        std::string wakeCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/wakeWord.py >/dev/null 2>&1";
+        // std::string wakeCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/wakeWord.py";
         self_->info("Launching wake word listener.");
         pid_t wakeWordPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::launch(wakeCmd);
 
@@ -47,9 +48,12 @@ public:
         self_->info("Wake word detected!");
         self_->say("Yes?");
 
+        sleep(5);
+
         // --- STT ---
         ::unlink("/tmp/dhome_stt.sock");
-        std::string sttCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py";
+        // std::string sttCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py";
+        std::string sttCmd  = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py >/dev/null 2>&1";
         self_->info("Launching STT listener.");
         pid_t sttPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::launch(sttCmd);
 
@@ -64,6 +68,8 @@ public:
             return;
         }
         self_->info("Connected to STT socket.");
+
+        sleep(5);
 
         // --- Main Loop ---
         std::string transcript;

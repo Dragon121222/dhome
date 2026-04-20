@@ -21,11 +21,11 @@ public:
             escaped.replace(pos, 1, "\\\"");
             pos += 2;
         }
-        std::string cmd = "echo \"" + escaped + "\" | "
+        std::string cmd = "( echo \"" + escaped + "\" | "
                         "piper-tts --model /home/drake/.local/share/piper/en_GB-northern_english_male-medium.onnx "
                         "--output-raw | "
                         "sox -r 22050 -e signed -b 16 -c 1 -t raw - -t raw - pitch -50 reverb 10 | "
-                        "aplay -r 22050 -f S16_LE -t raw - &";
+                        "aplay -r 22050 -f S16_LE -t raw - ) >/dev/null 2>&1 &";
         return self_->dhome::util::systemCmd<dbase_t,dtraits_t>::run(cmd);
     }
 

@@ -1,3 +1,7 @@
+import sys, os
+sys.stdout = open(os.devnull, 'w')
+sys.stderr = open(os.devnull, 'w')
+
 import sounddevice as sd
 import numpy as np
 from openwakeword.model import Model
