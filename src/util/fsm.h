@@ -46,8 +46,6 @@ public:
             if(e == dtraits::error::kError) {
                 self_->template error<typeTag>("Could not find state function associated with your currentState!");
                 return;
-            } else {
-                self_->template info<typeTag>("Found Function!");
             }
 
             currentState_ = (self_->*f)();

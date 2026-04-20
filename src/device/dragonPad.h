@@ -106,19 +106,30 @@ public:
 
     void run() {
         auto self_ = this->self();
-        self_->listenOnPort(dPort_, &dragonPad<dbase,dtraits>::onMessage);
+        typename dtraits_t::error e1 = self_->listenOnPort(dPort_, &dragonPad<dbase,dtraits>::onMessage);
+        if(e1 == dtraits_t::error::kError) {
+            self_->template info<dhome::net::Net>("Could not listen on port.");
+        }
+
+        ipAddr_ = self_->getPrimaryIp();
+
+        sleep(1);
+
+        typename dtraits_t::error e2 = self_->trySend("Hello There", ipAddr_, dPort_);
+        if(e2 == dtraits_t::error::kError) {
+            self_->template info<dhome::net::Net>("Couldn't Send Message!");
+        }
+
         listenForWakeWord();
 
         self_->say("Yes?");
-
         sleep(10);
-
         listenForTts();
-
     }
 
     int sttFd_ = -1;
     uint16_t dPort_ = 64209;
+    std::string ipAddr_;
 };
 
 }

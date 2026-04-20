@@ -90,6 +90,8 @@ public:
     // Non-Blocking
     typename dtraits_t::error listenOnPort(uint16_t port, Callback callback,
                     TcpFlags flags = TcpFlags::KeepListening) {
+        dbase_t* self_ = this->self();
+        self_->template info<typeTag>("Listening On Port: " + std::to_string(port));
         int serverFd = ::socket(AF_INET, SOCK_STREAM, 0);
         if(serverFd < 0) return dtraits_t::error::kError;
         int opt = 1;
@@ -103,7 +105,7 @@ public:
             return dtraits_t::error::kError;
         }
         ::listen(serverFd, 10);
-        dbase_t* self_ = this->self();
+
         auto handler = [serverFd, callback, flags, self_]() {
             do {
                 sockaddr_in clientAddr{};

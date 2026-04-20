@@ -41,10 +41,16 @@ public:
 
     // Returns first non-loopback IPv4 — sensible default
     std::string getPrimaryIp() {
+        auto self_ = this->self();
         std::vector<IpEntry> entries;
         if(getIps(entries) != dtraits_t::error::kNoError) return "";
-        for(auto& e : entries)
-            if(!e.isLoopback) return e.ip;
+        for(auto& e : entries) {
+            if(!e.isLoopback) {
+                self_->template info<typeTag>("Ip Addr: " + e.ip);
+                return e.ip;
+            }
+        }
+
         return "";
     }
 };
