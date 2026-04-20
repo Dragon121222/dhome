@@ -32,22 +32,22 @@ public:
 
         auto self_ = this->self();
 
-        self_->info("Starting Fsm Run!");
+        self_->template info<typeTag>("Starting Fsm Run!");
 
         size_t turns = 0; 
 
         while(currentState_ != state_t::END) {
 
-            self_->info(std::string("Turn: ") + std::to_string(turns));
+            self_->template info<typeTag>(std::string("Turn: ") + std::to_string(turns));
 
             stateFunc_t f;
             typename dtraits::error e = dhome::util::getValFromMap<typename dtraits::error>(self_->getStateMap(), currentState_, f);
 
             if(e == dtraits::error::kError) {
-                self_->error("Could not find state function associated with your currentState!");
+                self_->template error<typeTag>("Could not find state function associated with your currentState!");
                 return;
             } else {
-                self_->info("Found Function!");
+                self_->template info<typeTag>("Found Function!");
             }
 
             currentState_ = (self_->*f)();

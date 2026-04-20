@@ -25,7 +25,7 @@ public:
         ::unlink("/tmp/dhome_wake.sock");
         std::string wakeCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/wakeWord.py >/dev/null 2>&1";
         // std::string wakeCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/wakeWord.py";
-        self_->info("Launching wake word listener.");
+        self_->template info<typeTag>("Launching wake word listener.");
         pid_t wakeWordPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::launch(wakeCmd);
 
         typename dtraits_t::error e = dtraits_t::error::kError;
@@ -34,18 +34,18 @@ public:
             e = self_->connectSocket("/tmp/dhome_wake.sock");
         }
         if(e == dtraits_t::error::kError) {
-            self_->error("Couldn't connect to wake word socket!");
+            self_->template error<typeTag>("Couldn't connect to wake word socket!");
             return;
         }
-        self_->info("Connected to wake word socket.");
+        self_->template info<typeTag>("Connected to wake word socket.");
 
         // --- Main Loop ---
-        self_->info("Waiting for wake word...");
+        self_->template info<typeTag>("Waiting for wake word...");
         auto state = self_->dhome::audio::wakeWord<dbase_t,dtraits_t>::listen();
 
         self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(wakeWordPid_);
 
-        self_->info("Wake word detected!");
+        self_->template info<typeTag>("Wake word detected!");
         self_->say("Yes?");
 
         sleep(5);
@@ -54,7 +54,7 @@ public:
         ::unlink("/tmp/dhome_stt.sock");
         // std::string sttCmd = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py";
         std::string sttCmd  = "/usr/bin/python /home/drake/Documents/dHome/src/audio/stt.py >/dev/null 2>&1";
-        self_->info("Launching STT listener.");
+        self_->template info<typeTag>("Launching STT listener.");
         pid_t sttPid_ = self_->dhome::util::systemCmd<dbase_t,dtraits_t>::launch(sttCmd);
 
         e = dtraits_t::error::kError;
@@ -63,22 +63,22 @@ public:
             e = connectStt("/tmp/dhome_stt.sock");
         }
         if(e == dtraits_t::error::kError) {
-            self_->error("Couldn't connect to STT socket!");
+            self_->template error<typeTag>("Couldn't connect to STT socket!");
             self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(sttPid_);
             return;
         }
-        self_->info("Connected to STT socket.");
+        self_->template info<typeTag>("Connected to STT socket.");
 
         sleep(5);
 
         // --- Main Loop ---
         std::string transcript;
-        self_->info("Listening for command...");
+        self_->template info<typeTag>("Listening for command...");
         if(self_->dhome::audio::stt<dbase_t,dtraits_t>::listen(transcript) != dtraits_t::error::kNoError) {
-            self_->error("STT failed.");
+            self_->template error<typeTag>("STT failed.");
             return;
         }
-        self_->info("Recorded: " + transcript);
+        self_->template info<typeTag>("Recorded: " + transcript);
 
         self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(sttPid_);
     }
@@ -99,7 +99,7 @@ public:
 
     typename dtraits_t::error onMessage(const std::string& msg, const std::string& ip, uint16_t port) {
         auto self_ = this->self();
-        self_->info("Received: " + msg + " from " + ip);
+        self_->template info<typeTag>("Received: " + msg + " from " + ip);
         return dtraits_t::error::kNoError;
     }
 

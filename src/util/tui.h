@@ -13,8 +13,34 @@
 #include <iomanip>
 #include <sstream>
 
+namespace dhome {
+    namespace util {
+        struct Util;
+    }
+    
+    namespace net {
+        struct Net;
+    }
+    
+    namespace audio {
+        struct Audio;
+    }
+    
+    namespace device {
+        struct Device;
+    }
+
+    namespace system {
+        struct System;
+    }
+
+}
+
+
 namespace dhome::util {
 
+
+    
 template<typename dbase, typename dtraits>
 class tui : public dhome::util::mixinBase<tui<dbase,dtraits>> {
 public:
@@ -64,9 +90,25 @@ public:
         dirty_ = true;
     }
 
-    void info(const std::string& msg,  const std::string& panel = PANEL_SYSTEM) { log(panel, "INFO",  msg); }
-    void warn(const std::string& msg,  const std::string& panel = PANEL_SYSTEM) { log(panel, "WARN",  msg); }
-    void error(const std::string& msg, const std::string& panel = PANEL_SYSTEM) { log(panel, "ERROR", msg); }
+    template<typename Tag>
+    static constexpr const char* panelForTag() {
+        if constexpr      (std::is_same_v<Tag, dhome::util::Util>)     return PANEL_FSM;
+        else if constexpr (std::is_same_v<Tag, dhome::net::Net>)       return PANEL_NET;
+        else if constexpr (std::is_same_v<Tag, dhome::audio::Audio>)   return PANEL_AUDIO;
+        else if constexpr (std::is_same_v<Tag, dhome::device::Device>) return PANEL_DEVICE;
+        else                                                            return PANEL_SYSTEM;
+    }
+
+    template<typename Tag = dhome::system::System>
+    void info(const std::string& msg)  { log(panelForTag<Tag>(), "INFO",  msg); }
+    template<typename Tag = dhome::system::System>
+    void warn(const std::string& msg)  { log(panelForTag<Tag>(), "WARN",  msg); }
+    template<typename Tag = dhome::system::System>
+    void error(const std::string& msg) { log(panelForTag<Tag>(), "ERROR", msg); }
+
+    void info(const std::string& msg)  { log(panelForTag<dhome::system::System>(), "INFO",  msg); }
+    void warn(const std::string& msg)  { log(panelForTag<dhome::system::System>(), "WARN",  msg); }
+    void error(const std::string& msg) { log(panelForTag<dhome::system::System>(), "ERROR", msg); }
 
 private:
     struct LogEntry {

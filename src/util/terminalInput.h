@@ -19,7 +19,7 @@ public:
     std::string waitForInput(const std::string& prompt = "") {
         auto self_ = this->self();
         if(!prompt.empty())
-            self_->info(prompt);
+            self_->template info<typeTag>(prompt);
         std::string in;
         std::getline(std::cin, in);
         return in;

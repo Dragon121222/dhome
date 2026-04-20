@@ -20,7 +20,7 @@ public:
         uint8_t byte;
         auto e = self_->read(byte);  // blocks until wake word
         if(e == dtraits::error_t::kError) {
-            self_->error("Socket read error!");
+            self_->template error<typeTag>("Socket read error!");
             return dtraits::state_t::END;
         }
 
