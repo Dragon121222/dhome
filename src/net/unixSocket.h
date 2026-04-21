@@ -23,8 +23,11 @@ public:
         addr.sun_family = AF_UNIX;
         ::strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
 
-        if(::connect(fd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0)
+        if(::connect(fd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+            ::close(fd_);
+            fd_ = -1;
             return dtraits_t::error::kError;
+        }
 
         return dtraits_t::error::kNoError;
     }

@@ -24,9 +24,6 @@ public:
             ::dup2(devnull, STDOUT_FILENO);
             ::dup2(devnull, STDERR_FILENO);
             ::close(devnull);
-            // Detach from controlling terminal
-            int tty = ::open("/dev/tty", O_RDWR);
-            if(tty >= 0) ::close(tty);
             ::setsid();
             ::execl("/bin/sh", "sh", "-c", cmd.c_str(), nullptr);
             ::_exit(1);

@@ -17,11 +17,11 @@ public:
         auto self_ = this->self();
         std::string escaped = text;
         size_t pos = 0;
-        while((pos = escaped.find('"', pos)) != std::string::npos) {
-            escaped.replace(pos, 1, "\\\"");
-            pos += 2;
+        while((pos = escaped.find('\'', pos)) != std::string::npos) {
+            escaped.replace(pos, 1, "'\\''");
+            pos += 4;
         }
-        std::string cmd = "( echo \"" + escaped + "\" | "
+        std::string cmd = "( echo '" + escaped + "' | "
                         "piper-tts --model /home/drake/.local/share/piper/en_GB-northern_english_male-medium.onnx "
                         "--output-raw | "
                         "sox -r 22050 -e signed -b 16 -c 1 -t raw - -t raw - pitch -50 reverb 10 | "

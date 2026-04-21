@@ -40,6 +40,6 @@ class log : public dhome::util::mixinBase<log<dbase,dtraits>>  {
 
 };
 
-};
+}
 
 #endif

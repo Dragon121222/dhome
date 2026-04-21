@@ -41,7 +41,10 @@ public:
 
         // --- Main Loop ---
         self_->template info<dhome::audio::Audio>("Waiting for wake word...");
-        auto state = self_->dhome::audio::wakeWord<dbase_t,dtraits_t>::listen();
+        if(self_->dhome::audio::wakeWord<dbase_t,dtraits_t>::listen() != dtraits_t::error::kNoError) {
+            self_->template error<dhome::audio::Audio>("Wake word listen failed!");
+            return;
+        }
 
         self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(wakeWordPid_);
 
@@ -132,7 +135,6 @@ public:
         sleep(10);
     }
 
-    int sttFd_ = -1;
     uint16_t dPort_ = 64209;
     std::string ipAddr_;
 };

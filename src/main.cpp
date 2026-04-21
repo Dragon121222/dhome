@@ -57,9 +57,10 @@ app() {}
 ~app() {}
 
 const stateMap_t stateMap_ = {
-    {state_t::START,            &app::start_},
-    {state_t::READ_CONFIG,      &app::readConfig_},
-    {state_t::START_DRAGON_PAD, &app::runDragonPad_}
+    {state_t::START,              &app::start_},
+    {state_t::READ_CONFIG,        &app::readConfig_},
+    {state_t::START_DRAGON_FIRE,  &app::runDragonFire_},
+    {state_t::START_DRAGON_PAD,   &app::runDragonPad_}
 };
 
 const deviceNameMap_t deviceNameMap_ = {

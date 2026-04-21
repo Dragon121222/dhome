@@ -28,6 +28,8 @@ public:
         // read transcript
         std::string buf(len, '\0');
         if(::recv(sttFd_, buf.data(), len, MSG_WAITALL) != (ssize_t)len) return dtraits_t::error::kError;
+        while(!buf.empty() && (buf.back() == '\n' || buf.back() == '\r'))
+            buf.pop_back();
         transcript = buf;
         return dtraits_t::error::kNoError;
     }

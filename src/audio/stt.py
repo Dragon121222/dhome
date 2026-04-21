@@ -38,12 +38,13 @@ while True:
         wavfile.write(wav_path, TARGET_RATE, resampled_int)
 
         model_path = os.path.expanduser("~/.local/share/whisper/models/ggml-base.en.bin")
-        result = subprocess.run(
-            ["whisper-cli", "-m", model_path, "-f", wav_path, "--no-timestamps", "-nt"],
-            capture_output=True, text=True
-        )
-        os.unlink(wav_path)
-
-        transcript = result.stdout.strip()
+        try:
+            result = subprocess.run(
+                ["whisper-cli", "-m", model_path, "-f", wav_path, "--no-timestamps", "-nt"],
+                capture_output=True, text=True
+            )
+            transcript = result.stdout.strip()
+        finally:
+            os.unlink(wav_path)
         msg = (transcript + "\n").encode("utf-8")
         conn.sendall(len(msg).to_bytes(4, 'little') + msg)

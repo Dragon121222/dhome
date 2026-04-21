@@ -14,17 +14,17 @@ public:
     wakeWord() {}
     ~wakeWord() {}
 
-    typename dtraits::state_t listen() {
+    typename dtraits_t::error listen() {
         auto self_ = this->self();
 
         uint8_t byte;
         auto e = self_->read(byte);  // blocks until wake word
-        if(e == dtraits::error_t::kError) {
+        if(e == dtraits_t::error::kError) {
             self_->template error<typeTag>("Socket read error!");
-            return dtraits::state_t::END;
+            return dtraits_t::error::kError;
         }
 
-        return dtraits::state_t::END;  // loop back
+        return dtraits_t::error::kNoError;
     }
 
 
