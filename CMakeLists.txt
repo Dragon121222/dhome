@@ -9,6 +9,9 @@ add_executable(dhome src/main.cpp)
 find_package(yaml-cpp REQUIRED)
 target_link_libraries(dhome yaml-cpp ncurses)
 
+find_package(X11 REQUIRED)
+target_link_libraries(dhome X11::X11 X11::Xft)
+
 target_include_directories(dhome PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/util
@@ -16,6 +19,7 @@ target_include_directories(dhome PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ai
     ${CMAKE_CURRENT_SOURCE_DIR}/src/device
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/gui
 )
 
 install(TARGETS dhome DESTINATION bin)

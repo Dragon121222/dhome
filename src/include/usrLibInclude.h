@@ -5,6 +5,7 @@
 #include "net_include.h"
 #include "audio_include.h"
 #include "ai_include.h"
+#include "gui_include.h"
 #include "device_include.h"
 
 #endif

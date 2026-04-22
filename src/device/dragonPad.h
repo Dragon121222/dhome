@@ -122,31 +122,29 @@ public:
 
         ipAddr_ = self_->getPrimaryIp();
 
-        sleep(1);
+        // sleep(1);
 
-        typename dtraits_t::error e2 = self_->trySend("Hello There", ipAddr_, dPort_);
-        if(e2 == dtraits_t::error::kError) {
-            self_->template info<dhome::net::Net>("Couldn't Send Message!");
-        }
+        // typename dtraits_t::error e2 = self_->trySend("Hello There", ipAddr_, dPort_);
+        // if(e2 == dtraits_t::error::kError) {
+        //     self_->template info<dhome::net::Net>("Couldn't Send Message!");
+        // }
 
-        while(true) {
+        // while(true) {
+        //     listenForWakeWord();
+        //     self_->say("Yes?");
 
-            listenForWakeWord();
-            self_->say("Yes?");
+        //     std::string transcript;
+        //     while(transcript != "Quit.") {
+        //         if(!listenForStt(transcript)) return;
 
-            std::string transcript;
+        //         std::string response;
+        //         if(self_->dhome::ai::claude<dbase_t,dtraits_t>::ask(transcript, response) != dtraits_t::error::kNoError) return;
 
-            while(transcript != "Quit.") {
-                if(!listenForStt(transcript)) return;
+        //         self_->say(response);
+        //     }
+        // }
 
-                std::string response;
-                if(self_->dhome::ai::claude<dbase_t,dtraits_t>::ask(transcript, response) != dtraits_t::error::kNoError) return;
-
-                self_->say(response);
-            }
-
-        }
-
+        self_->openWindow();
 
 
     }

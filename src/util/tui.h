@@ -34,6 +34,14 @@ namespace dhome {
         struct System;
     }
 
+    namespace ai {
+        struct Ai;
+    }
+
+    namespace gui {
+        struct Gui;
+    }
+
 }
 
 
@@ -54,6 +62,8 @@ public:
     static constexpr const char* PANEL_NET    = "Net";
     static constexpr const char* PANEL_DEVICE = "Device";
     static constexpr const char* PANEL_SYSTEM = "System";
+    static constexpr const char* PANEL_GUI    = "Gui";
+    static constexpr const char* PANEL_AI     = "Ai";
 
     tui() {
         initscr();
@@ -92,10 +102,12 @@ public:
 
     template<typename Tag>
     static constexpr const char* panelForTag() {
-        if constexpr      (std::is_same_v<Tag, dhome::util::Util>)     return PANEL_FSM;
-        else if constexpr (std::is_same_v<Tag, dhome::net::Net>)       return PANEL_NET;
-        else if constexpr (std::is_same_v<Tag, dhome::audio::Audio>)   return PANEL_AUDIO;
-        else if constexpr (std::is_same_v<Tag, dhome::device::Device>) return PANEL_DEVICE;
+        if constexpr      (std::is_same_v<Tag, dhome::util::Util>)      return PANEL_FSM;
+        else if constexpr (std::is_same_v<Tag, dhome::net::Net>)        return PANEL_NET;
+        else if constexpr (std::is_same_v<Tag, dhome::audio::Audio>)    return PANEL_AUDIO;
+        else if constexpr (std::is_same_v<Tag, dhome::device::Device>)  return PANEL_DEVICE;
+        else if constexpr (std::is_same_v<Tag, dhome::gui::Gui>)        return PANEL_GUI;
+        else if constexpr (std::is_same_v<Tag, dhome::ai::Ai>)          return PANEL_AI;
         else                                                            return PANEL_SYSTEM;
     }
 
@@ -128,14 +140,18 @@ private:
         int rows, cols;
         getmaxyx(stdscr, rows, cols);
 
-        int halfRow = rows / 2;
+        int quarterRow = rows / 4;
         int halfCol = cols / 2;
 
         // top-left, top-right, bottom-left, bottom-right, bottom-full
-        windows_[PANEL_FSM]    = newwin(halfRow,         halfCol,         0,       0);
-        windows_[PANEL_AUDIO]  = newwin(halfRow,         cols - halfCol,  0,       halfCol);
-        windows_[PANEL_NET]    = newwin(halfRow - 3,     halfCol,         halfRow, 0);
-        windows_[PANEL_DEVICE] = newwin(halfRow - 3,     cols - halfCol,  halfRow, halfCol);
+        windows_[PANEL_FSM]     = newwin(quarterRow,        halfCol,         0,       0);
+        windows_[PANEL_AUDIO]   = newwin(quarterRow,        cols - halfCol,  0,       halfCol);
+        windows_[PANEL_NET]     = newwin(quarterRow,        halfCol,         quarterRow, 0);
+        windows_[PANEL_DEVICE]  = newwin(quarterRow,        cols - halfCol,  quarterRow, halfCol);
+        windows_[PANEL_GUI]     = newwin(quarterRow,        halfCol,         2*quarterRow, 0);
+        windows_[PANEL_AI]      = newwin(quarterRow,        cols - halfCol,  2*quarterRow, halfCol);
+
+
         windows_[PANEL_SYSTEM] = newwin(3,               cols,            rows-3,  0);
 
         for(auto& [name, _] : windows_)

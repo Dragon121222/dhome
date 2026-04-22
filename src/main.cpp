@@ -44,7 +44,8 @@ using app_t = dhome::util::mixin<
     dhome::audio::wakeWord<app,app_traits>,
     dhome::audio::tts<app,app_traits>,
     dhome::audio::stt<app,app_traits>,
-    dhome::ai::claude<app,app_traits>
+    dhome::ai::claude<app,app_traits>,
+    dhome::gui::xlibWindow<app,app_traits>
 >;
 
 class app : public app_t {

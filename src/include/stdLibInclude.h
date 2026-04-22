@@ -20,5 +20,6 @@
 #include <iomanip>
 #include <sstream>
 #include <fcntl.h>
+#include <cstring>
 
 #endif
