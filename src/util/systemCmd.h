@@ -32,6 +32,16 @@ public:
         return pid;
     }
 
+    typename dtraits_t::error capture(const std::string& cmd, std::string& output) {
+        FILE* pipe = ::popen(cmd.c_str(), "r");
+        if(!pipe) return dtraits_t::error::kError;
+        char buf[256];
+        while(::fgets(buf, sizeof(buf), pipe))
+            output += buf;
+        ::pclose(pipe);
+        return dtraits_t::error::kNoError;
+    }
+
     typename dtraits_t::error kill(pid_t pid) {
         struct sigaction sa{}, old{};
         sa.sa_handler = SIG_IGN;

@@ -52,7 +52,7 @@ public:
 
     }
 
-    void listenForStt() {
+    bool listenForStt(std::string& transcript) {
         auto self_ = this->self();
 
         // --- STT ---
@@ -69,20 +69,21 @@ public:
         if(e == dtraits_t::error::kError) {
             self_->template error<dhome::audio::Audio>("Couldn't connect to STT socket!");
             self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(sttPid_);
-            return;
+            return false;
         }
         self_->template info<dhome::audio::Audio>("Connected to STT socket.");
 
         // --- Main Loop ---
-        std::string transcript;
         self_->template info<dhome::audio::Audio>("Listening for command...");
         if(self_->dhome::audio::stt<dbase_t,dtraits_t>::listen(transcript) != dtraits_t::error::kNoError) {
             self_->template error<dhome::audio::Audio>("STT failed.");
-            return;
+            self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(sttPid_);
+            return false;
         }
         self_->template info<dhome::audio::Audio>("Recorded: " + transcript);
 
         self_->dhome::util::systemCmd<dbase_t,dtraits_t>::kill(sttPid_);
+        return true;
     }
 
     typename dtraits_t::error connectStt(const char* path) {
@@ -128,11 +129,26 @@ public:
             self_->template info<dhome::net::Net>("Couldn't Send Message!");
         }
 
-        listenForWakeWord();
-        self_->say("Yes?");
+        while(true) {
 
-        listenForStt();
-        sleep(10);
+            listenForWakeWord();
+            self_->say("Yes?");
+
+            std::string transcript;
+
+            while(transcript != "Quit.") {
+                if(!listenForStt(transcript)) return;
+
+                std::string response;
+                if(self_->dhome::ai::claude<dbase_t,dtraits_t>::ask(transcript, response) != dtraits_t::error::kNoError) return;
+
+                self_->say(response);
+            }
+
+        }
+
+
+
     }
 
     uint16_t dPort_ = 64209;

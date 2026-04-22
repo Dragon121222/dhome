@@ -35,7 +35,6 @@ using app_t = dhome::util::mixin<
     dhome::util::fsm<app,app_traits>,
     dhome::util::terminalInput<app,app_traits>,
     dhome::util::tui<app,app_traits>,
-    // dhome::util::log<app,app_traits>,
     dhome::util::yaml<app,app_traits>,
     dhome::util::systemCmd<app,app_traits>,
     dhome::net::unixSocket<app,app_traits>,
@@ -44,7 +43,8 @@ using app_t = dhome::util::mixin<
     dhome::device::dragonPad<app,app_traits>,
     dhome::audio::wakeWord<app,app_traits>,
     dhome::audio::tts<app,app_traits>,
-    dhome::audio::stt<app,app_traits>
+    dhome::audio::stt<app,app_traits>,
+    dhome::ai::claude<app,app_traits>
 >;
 
 class app : public app_t {
