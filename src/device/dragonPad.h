@@ -144,6 +144,7 @@ public:
         //     }
         // }
 
+        self_->addGridTextBox(2, 1, 15, 5, "Dragon Pad");
         self_->openWindow();
 
 
